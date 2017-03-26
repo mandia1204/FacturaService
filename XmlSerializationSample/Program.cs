@@ -1,6 +1,5 @@
 ﻿using XmlSerializationSample.Builders;
 using XmlSerializationSample.ServiceRequest;
-using System;
 using System.Text;
 using XmlSerializationSample.Util;
 using XmlSerializationSample.Services;
@@ -18,12 +17,13 @@ namespace XmlSerializationSample
             var repo = new InvoiceRepository();
             var builder = new SoapBuilder(encoding);
             var serializer = new Serializer();
+            var zipper = new Zipper();
 
             var client = new InvoiceClient(requestManager);
-            var service = new InvoiceService(repo, client, requestManager ,  builder, serializer);
-            
+            var service = new InvoiceService(repo, client, requestManager ,  builder, serializer, zipper);
+
             var result = service.SendBill("12345abc");
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
             //Console.Read();
         }
     }

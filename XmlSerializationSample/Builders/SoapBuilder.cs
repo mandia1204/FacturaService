@@ -96,7 +96,7 @@ namespace XmlSerializationSample.Builders
             var sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine(GetBoundary("body"));
-            sb.AppendLine(string.Format("Content-Type: application/zip; name={0}", fileName));
+            sb.AppendLine("Content-Type: application/zip");
             sb.AppendLine("Content-Transfer-Encoding: binary");
             sb.AppendLine(string.Format("Content-ID: <{0}>", fileName));
             sb.AppendLine(string.Format("Content-Disposition: attachment; name=\"{0}\", filename=\"{0}\"", fileName));
