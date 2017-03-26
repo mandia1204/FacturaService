@@ -1,6 +1,0 @@
-c:\users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\bin\Debug\XmlSerializationSample.exe.config
-C:\Users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\bin\Debug\XmlSerializationSample.exe
-C:\Users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\bin\Debug\XmlSerializationSample.pdb
-C:\Users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\obj\Debug\XmlSerializationSample.csprojResolveAssemblyReference.cache
-C:\Users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\obj\Debug\XmlSerializationSample.exe
-C:\Users\marvin\documents\visual studio 2015\Projects\XmlSerializationSample\XmlSerializationSample\obj\Debug\XmlSerializationSample.pdb

@@ -27,24 +27,14 @@ namespace XmlSerializationSample.Senders
             var serializer = new Serializer();
             var soap = serializer.Serialize(envelope, null, NameSpaces.GetEnvelopeNamespaces(), true);
 
-            XmlDocument soapEnvelopeXml = new XmlDocument();
-            soapEnvelopeXml.LoadXml(soap);
-
             var boundaryInit = _builder.GetBoundary("init");
             var request = _requestManager.CreateWebRequest(_uri, action, boundaryInit);
 
-            //using (Stream stream = request.GetRequestStream())
-            //{
-            //    soapEnvelopeXml.Save(stream);
-            //}
-            //
-            //var fileBytes = File.ReadAllBytes(@"C:\Users\marvin\Documents\attachmentSample.txt");
             var fileBytes = File.ReadAllBytes(@"C:\Users\marvin\Google Drive\Facturacion Electronica\xml\20100066603-01-F001-1.zip");
 
             var soapRequest = new SoapRequest
             {
                 Request = request,
-                //SoapXml = soapEnvelopeXml,
                 SoapStr = soap,
                 FileBytes = fileBytes,
                 FileContent = fileContent,
