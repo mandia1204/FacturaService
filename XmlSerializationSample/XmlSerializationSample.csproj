@@ -47,7 +47,6 @@
     <Compile Include="Models\Envelope\EnvelopeOptions.cs" />
     <Compile Include="ServiceRequest\RequestOptions.cs" />
     <Compile Include="Repositories\InvoiceRepository.cs" />
-    <Compile Include="Senders\InvoiceSender.cs" />
     <Compile Include="Models\AccountingCustomerParty.cs" />
     <Compile Include="Models\AccountingSupplierParty.cs" />
     <Compile Include="Models\Envelope\Envelope.cs" />

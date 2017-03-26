@@ -6,7 +6,6 @@ using XmlSerializationSample.Clients;
 using XmlSerializationSample.Models;
 using XmlSerializationSample.Models.Envelope;
 using XmlSerializationSample.Repositories;
-using XmlSerializationSample.Senders;
 using XmlSerializationSample.ServiceRequest;
 using XmlSerializationSample.Util;
 

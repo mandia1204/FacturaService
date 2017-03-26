@@ -6,34 +6,13 @@ namespace XmlSerializationSample.ServiceRequest
 {
     public class RequestManager
     {
-        private string _encodingName;
-        public RequestManager(string encodingName)
-        {
-            _encodingName = encodingName;
-        }
-
-        public HttpWebRequest CreateWebRequest(string url, string action, string boundary)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Headers.Add("SOAPAction", action);
-            request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
-            //request.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
-            request.Method = "POST";
-            request.Headers.Add("MIME-Version", "1.0");
-            //"multipart/form-data; type=\"application/xop+xml;\" boundary=\"" + GetBoundary() + "\"";
-            var contenType = string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org>\"; boundary=\"{0}\"", boundary);
-            request.ContentType = contenType;
-
-            return request;
-        }
-
         public HttpWebRequest CreateWebRequest(RequestOptions opt)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(opt.Uri);
             request.Headers.Add("SOAPAction", opt.Action);
             request.Headers.Add(opt.Headers);
             request.Method = opt.Method;
-            var contenType = string.Format("{0}; type=\"{1}\"; start=\"{3}\"", opt.ContentType, opt.Type, opt.Start);
+            var contenType = string.Format("{0}; type=\"{1}\"; start=\"{2}\"", opt.ContentType, opt.Type, opt.Start);
             if (opt.HasAttachment)
             {
                 contenType += string.Format("; boundary=\"{0}\"",opt.Boundary);
