@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients\InvoiceClient.cs" />
+    <Compile Include="Models\Envelope\EnvelopeOptions.cs" />
+    <Compile Include="ServiceRequest\RequestOptions.cs" />
+    <Compile Include="Repositories\InvoiceRepository.cs" />
     <Compile Include="Senders\InvoiceSender.cs" />
     <Compile Include="Models\AccountingCustomerParty.cs" />
     <Compile Include="Models\AccountingSupplierParty.cs" />
@@ -58,6 +62,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Builders\SoapBuilder.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
     <Compile Include="Util\Serializer.cs" />
     <Compile Include="ServiceRequest\RequestManager.cs" />
   </ItemGroup>
@@ -66,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Generation\" />
+    <Folder Include="Models\Communication\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

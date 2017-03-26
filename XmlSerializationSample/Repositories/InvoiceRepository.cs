@@ -1,67 +1,14 @@
-﻿using XmlSerializationSample.Models;
+﻿using System.Collections.Generic;
+using XmlSerializationSample.Models;
 using XmlSerializationSample.Models.Envelope;
-using System.Collections.Generic;
-using XmlSerializationSample.Models.UBLExtensions;
 using XmlSerializationSample.Models.InvoiceLine;
-using XmlSerializationSample.Builders;
-using XmlSerializationSample.Senders;
-using XmlSerializationSample.ServiceRequest;
-using System;
-using System.Text;
-using XmlSerializationSample.Util;
+using XmlSerializationSample.Models.UBLExtensions;
 
-namespace XmlSerializationSample
+namespace XmlSerializationSample.Repositories
 {
-    class Program
+    public class InvoiceRepository
     {
-        static void Main(string[] args)
-        {
-            var serializer = new Serializer();
-            var invoice = GetFirstSample();
-            var xml = serializer.Serialize(invoice, NameSpaces.DEFAULT, NameSpaces.GetInvoiceNamespaces());
-            var encoding = Encoding.UTF8;
-
-            var requestManager = new RequestManager(encoding.BodyName);
-            var requestSubmitter = new SoapBuilder(encoding);
-            var uri = "http://localhost.fiddler:8088/mockBillServicePortBinding";
-            var action = "\"urn:sendBill\"";
-            var invoiceSender = new InvoiceSender(uri, requestManager, requestSubmitter);
-            var envelope = GetEnvelope();
-            //TODO: Get Xml inside zip
-
-            var result = invoiceSender.Send(envelope, null, action);
-            Console.WriteLine(result);
-            //Console.Read();
-        }
-
-        private static Envelope GetEnvelope()
-        {
-            var envelope = new Envelope
-            {
-                Header = new Header
-                {
-                    Security = new Security
-                    {
-                        UsernameToken = new UsernameToken
-                        {
-                            Username= "20100066603MODDATOS",
-                            Password= "moddatos"
-                        }
-                    }
-                },
-                Body = new Body
-                {
-                    SendBill = new SendBill
-                    {
-                        FileName = "20100066603-01-F001-1.zip",
-                        ContentFile = "cid:20100066603-01-F001-1.zip"
-                    }
-                }
-            };
-            return envelope;
-        }
-
-        private static Invoice GetFirstSample()
+        public Invoice GetInvoice(string invoiceId)
         {
             var newInvoice = new Invoice
             {
@@ -151,17 +98,18 @@ namespace XmlSerializationSample
                 },
                 UBLVersionID = "2.0",
                 CustomizationID = "1.0",
-                ID= "F001-4355",
+                ID = "F001-4355",
                 IssueDate = "2012-03-14",
-                InvoiceTypeCode ="01",
+                InvoiceTypeCode = "01",
                 DocumentCurrencyCode = "PEN",
                 Signature = new Models.Signature
                 {
-                      ID = "IDSignSP"
-                    , SignatoryParty = new SignatoryParty
+                    ID = "IDSignSP"
+                    ,
+                    SignatoryParty = new SignatoryParty
                     {
-                        PartyIdentification = new PartyIdentification { ID= "20100454523" },
-                        PartyName = new PartyName { Name= "SOPORTE TECNOLOGICO EIRL" }
+                        PartyIdentification = new PartyIdentification { ID = "20100454523" },
+                        PartyName = new PartyName { Name = "SOPORTE TECNOLOGICO EIRL" }
                     },
                     DigitalSignatureAttachment = new DigitalSignatureAttachment
                     {
@@ -179,32 +127,32 @@ namespace XmlSerializationSample
                     {
                         PostalAddress = new PostalAddress
                         {
-                            ID= "150111",
-                            StreetName= "AV. LOS PRECURSORES #1245",
-                            CitySubdivisionName="URB. MIGUEL GRAU",
+                            ID = "150111",
+                            StreetName = "AV. LOS PRECURSORES #1245",
+                            CitySubdivisionName = "URB. MIGUEL GRAU",
                             CityName = "LIMA",
                             CountrySubentity = "LIMA",
                             District = "EL AGUSTINO",
                             Country = new Country
                             {
-                                IdentificationCode ="PE"
+                                IdentificationCode = "PE"
                             }
                         },
                         PartyLegalEntity = new PartyLegalEntity
                         {
-                            RegistrationName= "SOPORTE TECNOLOGICOS EIRL"
+                            RegistrationName = "SOPORTE TECNOLOGICOS EIRL"
                         }
                     }
                 },
                 AccountingCustomerParty = new AccountingCustomerParty
                 {
                     CustomerAssignedAccountID = "20587896411",
-                    AdditionalAccountID ="6",
+                    AdditionalAccountID = "6",
                     Party = new Party
                     {
                         PartyLegalEntity = new PartyLegalEntity
                         {
-                            RegistrationName= "SERVICABINAS S.A."
+                            RegistrationName = "SERVICABINAS S.A."
                         }
                     }
                 },
@@ -212,8 +160,8 @@ namespace XmlSerializationSample
                 {
                     TaxAmount = new TaxAmount
                     {
-                        currencyID="PEN",
-                         Value= 62675.85
+                        currencyID = "PEN",
+                        Value = 62675.85
                     },
                     TaxSubTotal = new TaxSubTotal
                     {
@@ -226,8 +174,8 @@ namespace XmlSerializationSample
                         {
                             TaxScheme = new TaxScheme
                             {
-                                ID= "1000",
-                                Name= "IGV",
+                                ID = "1000",
+                                Name = "IGV",
                                 TaxTypeCode = "VAT"
                             }
                         }
@@ -235,7 +183,7 @@ namespace XmlSerializationSample
                 },
                 LegalMonetaryTotal = new LegalMonetaryTotal
                 {
-                    PayableAmount = new PayableAmount { CurrencyID="PEN", Text= 423225.00}
+                    PayableAmount = new PayableAmount { CurrencyID = "PEN", Text = 423225.00 }
                 },
                 InvoiceLines = new List<InvoiceLine>
                 {
@@ -289,7 +237,7 @@ namespace XmlSerializationSample
                                     }
                                 }
                             }
-                           
+
                         }, Item = new Item
                         {
                             Description ="Grabadora LG Externo Modelo: GE20LU10",
@@ -377,6 +325,33 @@ namespace XmlSerializationSample
             };
 
             return newInvoice;
+        }
+
+        public Envelope GetEnvelope(EnvelopeOptions opt)
+        {
+            var envelope = new Envelope
+            {
+                Header = new Header
+                {
+                    Security = new Security
+                    {
+                        UsernameToken = new UsernameToken
+                        {
+                            Username = opt.Username,
+                            Password = opt.Password
+                        }
+                    }
+                },
+                Body = new Body
+                {
+                    SendBill = new SendBill
+                    {
+                        FileName = opt.FileName,
+                        ContentFile = string.Format("cid:{0}", opt.FileName)
+                    }
+                }
+            };
+            return envelope;
         }
     }
 }
