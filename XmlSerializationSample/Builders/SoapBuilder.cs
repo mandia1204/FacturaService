@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using XmlSerializationSample.Models;
 
@@ -22,17 +23,16 @@ namespace XmlSerializationSample.Builders
                 WriteSoapHeader(stream);
 
                 //write soap request
-                byte[] bytes = _encoding.GetBytes(request.SoapStr);
-                stream.Write(bytes, 0, bytes.Length);
+                WriteSoapBody(stream, request.SoapStr);
 
-                WriteAttachment(stream, request.FileContent, request.FileName);
-                //request.SoapXml.Save(stream);
-                //zip the request
-                //using (var gz = new GZipStream(stream, CompressionMode.Compress, false))
-                //{
-                //    //request.SoapXml.Save(gz);
-                //    //WriteToStream(gz, request);
-                //}
+                //add attachment header
+                WriteAttachmentHeader(stream, request.FileName);
+
+                //write the zip file
+                WriteFile(stream, request.FileContent);
+
+                //write end of request
+                WriteEndFile(stream);
             }
         }
 
@@ -57,12 +57,27 @@ namespace XmlSerializationSample.Builders
             return string.Format("{0}=_Part_12_1770977271.1490462803037{1}", new string('-', num), tail);
         }
 
+        private void WriteEndFile(Stream stream)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine(GetBoundary("end"));
+
+            byte[] bytes = _encoding.GetBytes(sb.ToString());
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private void WriteSoapBody(Stream stream, string body)
+        {
+            byte[] bytes = _encoding.GetBytes(body);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
         private void WriteSoapHeader(Stream stream)
         {
             var sb = new StringBuilder();
             sb.AppendLine("");
             sb.AppendLine(GetBoundary("body"));
-            //sb.AppendLine(string.Format("Content-Type: text/xml; charset=UTF-8"));
             sb.AppendLine(string.Format("Content-Type: text/xml; charset={0}", _encodingName));
             sb.AppendLine("Content-Transfer-Encoding: 8bit");
             sb.AppendLine("Content-ID: <rootpart@soapui.org>");
@@ -72,20 +87,21 @@ namespace XmlSerializationSample.Builders
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        private void WriteAttachment(Stream stream, string fileContent, string fileName)
+        private void WriteFile(Stream stream, byte[] bytes)
+        {
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private void WriteAttachmentHeader(Stream stream, string fileName)
         {
             var sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine(GetBoundary("body"));
-            sb.AppendLine("Content-Type: text/plain; charset=us-ascii");
-            sb.AppendLine("Content-Transfer-Encoding: 7bit");
-            //sb.AppendLine("Content-ID: <attachmentSample.txt>");
-            //sb.AppendLine("Content-Disposition: attachment; name=\"attachmentSample.txt\"");
+            sb.AppendLine(string.Format("Content-Type: application/zip; name={0}", fileName));
+            sb.AppendLine("Content-Transfer-Encoding: binary");
             sb.AppendLine(string.Format("Content-ID: <{0}>", fileName));
-            sb.AppendLine(string.Format("Content-Disposition: attachment; name=\"{0}\"", fileName));
+            sb.AppendLine(string.Format("Content-Disposition: attachment; name=\"{0}\", filename=\"{0}\"", fileName));
             sb.AppendLine("");
-            sb.AppendLine(fileContent);
-            sb.AppendLine(GetBoundary("end"));
 
             byte[] bytes = _encoding.GetBytes(sb.ToString());
             stream.Write(bytes, 0, bytes.Length);

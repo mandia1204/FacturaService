@@ -36,8 +36,7 @@ namespace XmlSerializationSample.Senders
             {
                 Request = request,
                 SoapStr = soap,
-                FileBytes = fileBytes,
-                FileContent = fileContent,
+                FileContent = fileBytes,
                 FileName = "20100066603-01-F001-1.zip"
             };
 
